@@ -1,0 +1,84 @@
+#include "project.h"
+#include <stdio.h>
+
+int main(void)
+{
+    
+    int32 output;
+    char8 str[12];
+    float ADCVoltaje;
+    CyGlobalIntEnable; 
+    
+    Clock_1_Start();
+    PWM_1_Start();
+    
+    LCD_Start();
+    LCD_Position(0,0);
+    LCD_PrintString("Voltaje:");
+    
+    ADC_Start(); 
+    ADC_StartConvert();
+    ADC_IsEndConversion(ADC_WAIT_FOR_RESULT);
+
+    /* Place your initialization/startup code here (e.g. MyInst_Start()) */
+    for(;;)
+    { 
+        output=ADC_GetResult32();
+        ADCVoltaje=(5.000000/1048576)*output;
+        LCD_Position(0,10);
+        sprintf(str,"%.2f",ADCVoltaje);
+        LCD_PrintString(str);
+        
+        if(ADCVoltaje < 0.5){
+            PWM_1_WriteCompare(25);
+            LCD_Position(1,0);
+            LCD_PrintString("Velocidad: 10 %");
+        }
+        if(ADCVoltaje >= 0.5 && ADCVoltaje < 1){
+            PWM_1_WriteCompare(51);
+            LCD_Position(1,0);
+            LCD_PrintString("Velocidad: 20 %");
+        }
+        if(ADCVoltaje >= 1 && ADCVoltaje < 1.5){
+            PWM_1_WriteCompare(76);
+            LCD_Position(1,0);
+            LCD_PrintString("Velocidad: 30 %");
+        }
+        if(ADCVoltaje >= 1.5 && ADCVoltaje < 2){
+            PWM_1_WriteCompare(102);
+            LCD_Position(1,0);
+            LCD_PrintString("Velocidad: 40 %");
+        }
+        if(ADCVoltaje >= 2 && ADCVoltaje < 2.5){
+            PWM_1_WriteCompare(127);
+            LCD_Position(1,0);
+            LCD_PrintString("Velocidad: 50 %");
+        }
+        if(ADCVoltaje >= 2.5 && ADCVoltaje < 3){
+            PWM_1_WriteCompare(153);
+            LCD_Position(1,0);
+            LCD_PrintString("Velocidad: 60 %");
+        }
+        if(ADCVoltaje >= 3 && ADCVoltaje < 3.5){
+            PWM_1_WriteCompare(178);
+            LCD_Position(1,0);
+            LCD_PrintString("Velocidad: 70 %");
+        }
+        if(ADCVoltaje >= 3.5 && ADCVoltaje < 4){
+            PWM_1_WriteCompare(204);
+            LCD_Position(1,0);
+            LCD_PrintString("Velocidad: 80 %");
+        }
+        if(ADCVoltaje >= 4 && ADCVoltaje < 4.5){
+            PWM_1_WriteCompare(229);
+            LCD_Position(1,0);
+            LCD_PrintString("Velocidad: 90 %");
+        }
+        if(ADCVoltaje >= 4.5 ){
+            PWM_1_WriteCompare(255);
+            LCD_Position(1,0);
+            LCD_PrintString("Velocidad: 100%");
+        }
+       
+    }
+}
